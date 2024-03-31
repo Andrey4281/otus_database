@@ -82,3 +82,7 @@ See file hw2/script.sql
 - By using psql or pqAdmin you can connect to you databases
 ![img.png](img.png)
 ![img_1.png](img_1.png)
+
+# HW4
+- You can find simple example of working with DDL operation in file hw4/script.sql
+- Current database schema in file hw4/schema_hw4.png
