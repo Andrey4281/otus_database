@@ -75,3 +75,10 @@ unique: product.name, product_category.name, manufacturer.name, supplier.name, c
 greater then or equals zero: credit_card.balance, product_item.count
 greater then zero: product_item.price, purchase_item.product_count, purchase_item.sum
 See file hw2/script.sql
+
+# HW3
+- By using docker-compose.yaml file you can install postgresql server and pqAdmin in the same network (execute command in the folder hw3 - 'docker-compose up -d')
+- By using command 'sudo apt-get install postgresql-client' you can install psql on your Ubuntu host or virtual machine
+- By using psql or pqAdmin you can connect to you databases
+![img.png](img.png)
+![img_1.png](img_1.png)
