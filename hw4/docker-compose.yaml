@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  postgresql:
+    build: .
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - /home/andrey4281/postgresql/data:/var/lib/postgresql/data
+      - /home/andrey4281/tablespaces/ssd1:/ssd1
+      - /home/andrey4281/tablespaces/ssd2:/ssd2
+  pgadmin:
+    image: docker.io/dpage/pgadmin4:latest
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=Andrey4281@yandex.ru
+      - PGADMIN_DEFAULT_PASSWORD=123
+    ports:
+      - '9872:80'
+    depends_on:
+      - postgresql
+volumes:
+  db:
+    driver: local
