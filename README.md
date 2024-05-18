@@ -332,11 +332,11 @@ See file hw2/script.sql
   AND c.first_name ~ 'Al'
   AND c.last_name ~ 'T[ru]' RETURNING e.*;
 
-# HW5 Replication 
+# HW8 Replication 
 ## Physical replication
 We will use docker-compose.yaml (hw8/docker-compose.yaml) and create clusters in the same docker container
 1) Execute the command `docker-compose up -d` in folder hw8
-2) Execute the command to enter in container with postgresql: `docker exec -it {id_container_with_postgresql) bash`,
+2) Execute the command to enter in container with postgesql: `docker exec -it {id_container_with_postgresql) bash`,
 and then execute `su postgres`
 3) Execute the command to create master cluster of postgresql: `pg_createcluster -d /var/lib/postgresql/16/main 16 main`
 4) Execute the command to start master cluster `pg_ctlcluster 16 main start`
@@ -417,3 +417,15 @@ You can also to watch list of databases by using `\l`
    `psql -U postgres -p 5435`
    `\c otus`
    `select * from otus.test`
+MASTER CLUSTER STATE:
+![master](https://github.com/Andrey4281/otus_database/assets/43365575/eb60d94e-6b67-4dd1-b6dd-f2629855e06f)
+SLAVE PHYSICAL STATE:
+![slave_physical](https://github.com/Andrey4281/otus_database/assets/43365575/ab46eb55-10b4-4e9a-a3a7-0a006e51380b)
+SLAVE LOGICAL STATE:
+![slave_logical_1](https://github.com/Andrey4281/otus_database/assets/43365575/2699df34-b724-43b3-9015-ddb4f21b5acf)
+![slave_logical_2](https://github.com/Andrey4281/otus_database/assets/43365575/de23181f-1e42-4254-8fd2-2252fd125803)
+
+
+
+
+
