@@ -376,7 +376,7 @@ You can also to watch list of databases by using `\l`
     `select * from otus.customer;`
     `exit`
 
-## Physical replication
+## Logical replication
 1) Let's again connect to the master cluster and create additional table:
    `psql -U postgres -p 5433`
    `alter system set wal_level=logical;`
