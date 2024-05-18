@@ -417,11 +417,3 @@ You can also to watch list of databases by using `\l`
    `psql -U postgres -p 5435`
    `\c otus`
    `select * from otus.test`
-
-
-CREATE SUBSCRIPTION test_sub
-CONNECTION 'host=localhost port=5433 user=postgres
-password=postgres dbname=otus' PUBLICATION test_pub WITH
-(copy_data = true);
-
-pg_ctlcluster 16 slave2 restart
