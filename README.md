@@ -424,6 +424,13 @@ SLAVE PHYSICAL STATE:
 SLAVE LOGICAL STATE:
 ![slave_logical_1](https://github.com/Andrey4281/otus_database/assets/43365575/2699df34-b724-43b3-9015-ddb4f21b5acf)
 ![slave_logical_2](https://github.com/Andrey4281/otus_database/assets/43365575/de23181f-1e42-4254-8fd2-2252fd125803)
+CREATE MASTER CLUSTER
+![create_master_cluster](https://github.com/Andrey4281/otus_database/assets/43365575/fe9b8d88-d42a-4a24-b983-57600b28f2ac)
+COMMANDS MASTER PHYSICAL
+![Commands master physical](https://github.com/Andrey4281/otus_database/assets/43365575/f2a78bd4-04fd-4d17-ba4e-a45d6d4fc197)
+MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
+![master_physical_replication_slots](https://github.com/Andrey4281/otus_database/assets/43365575/457fd6d5-59ac-4163-8d2f-e6dbaff8dbd9)
+
 
 
 
