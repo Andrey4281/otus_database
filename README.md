@@ -356,7 +356,7 @@ You can also to watch list of databases by using `\l`
 11) Execute the command to create slave cluster of postgresql `pg_createcluster -d /var/lib/postgresql/16/slave1 16 slave1`
 12) Let's print cluster's list `pg_lsclusters`
 13) Let's delete all data of slave cluster `rm -rf /var/lib/postgresql/16/slave1`
-14) Let's create physical replication between master cluster and slave cluster `pg_basebackup -p 5433 -R -D /var/lib/postgresql/16/slave1`
+14) Let's create physical replication between master cluster and slave cluster `pg_basebackup -p 5433 -R -D /var/lib/postgresql/16/slave1 --create-slot --slot=slave1`
 15) Let's create replication delay between master cluster and slave cluster `echo 'recovery_min_apply_delay=5min' >> /var/lib/postgresql/16/slave1/postgresql.auto.conf`
 16) Let's start slave cluster `pg_ctlcluster 16 slave1 start`
 17) Let's connect to slave cluster `psql -U postgres -p 5434`
