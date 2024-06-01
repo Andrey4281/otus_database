@@ -451,7 +451,7 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
    `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 prepare`
 5) Let's run the test
    `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
-   init_image
+   ![sysbech_beforeconfig](https://github.com/Andrey4281/otus_database/assets/43365575/112b4605-8f05-4e80-8574-873f31b2d801)
 6) Let's edit config and add option innodb_buffer_pool_size. See my.cnf file.
    `innodb_buffer_pool_size=10G`'
 7) Restart container with mysql
@@ -459,8 +459,4 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
    `docker-compose up -d`
 8) Let's run test again:
    `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
-   Last image
-
-https://habr.com/ru/companies/simbirsoft/articles/271485/
-https://dev.to/aws-builders/rds-mysql-load-testing-with-sysbench-3i26
-https://habr.com/ru/articles/539792/
+   ![sysbench_after_optimization](https://github.com/Andrey4281/otus_database/assets/43365575/fd3e40a2-0eb0-4249-971b-476e8fa98029)
