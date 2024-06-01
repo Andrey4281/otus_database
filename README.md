@@ -435,8 +435,10 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
 # HW9 MySql
 1) In the directory hw9 run mysql server by using command: `docker-compose up -d`
 2) Check if the container started by the commands: `docker ps`, `docker logs {id_container_with_mysql)`
-images
+![mysql_docker_ps](https://github.com/Andrey4281/otus_database/assets/43365575/01297f7a-80bf-4d16-b862-43801b078865)
+![mysql logs](https://github.com/Andrey4281/otus_database/assets/43365575/b71f5c8a-701c-453d-9774-3b595fdde40c)
 3) Connect to otus database and check by using commands:
    `docker exec -it {id_container_with_mysql) bash`
    `mysql -u root -p12345 otus`
    `INSERT INTO unit(name) VALUES ('kg'), ('m');`
+![mysqlscript](https://github.com/Andrey4281/otus_database/assets/43365575/6a933af2-4ece-4b87-a0c0-8638771fa101)
