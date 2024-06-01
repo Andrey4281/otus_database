@@ -460,3 +460,4 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
 8) Let's run test again:
    `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
    ![sysbench_after_optimization](https://github.com/Andrey4281/otus_database/assets/43365575/fd3e40a2-0eb0-4249-971b-476e8fa98029)
+9) You can see that after optimization we have more transaction per seconds and lower 95 percentile 
