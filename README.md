@@ -462,3 +462,5 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
    ![sysbench_after_optimization](https://github.com/Andrey4281/otus_database/assets/43365575/fd3e40a2-0eb0-4249-971b-476e8fa98029)
 9) You can see that after optimization we have more transaction per seconds and lower 95 percentile 
 10) Let's add additional parameters in our file `my.cnf` and run sysbench again.
+![sysbenchfinal](https://github.com/Andrey4281/otus_database/assets/43365575/d19a5398-32d8-4788-80e7-ca08fa0620e4)
+
