@@ -1,7 +1,11 @@
 version: '3.1'
 
 services:
+  sysbench:
+    container_name: hw9_sysbench
+    image: perconalab/sysbench
   otusdb:
+    container_name: hw9_otusdb
     restart: always
     image: mysql:8.4.0
     environment:
