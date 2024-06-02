@@ -9,7 +9,7 @@ services:
     command:
       --init-file /init.sql
     volumes:
-      - /home/andrey4281/mysql/data:/var/lib/mysql
+      - data:/var/lib/mysql
       - ./init.sql:/init.sql
       - ./custom.conf:/etc/mysql/conf.d
     expose:
