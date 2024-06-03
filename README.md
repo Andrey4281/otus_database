@@ -432,7 +432,35 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
 ![master_physical_replication_slots](https://github.com/Andrey4281/otus_database/assets/43365575/457fd6d5-59ac-4163-8d2f-e6dbaff8dbd9)
 
 
-
-
-
+# HW9 MySql
+1) In the directory hw9 run mysql server by using command: `docker-compose up -d`
+2) Check if the container started by the commands: `docker ps`, `docker logs {id_container_with_mysql)`
+![mysql_docker_ps](https://github.com/Andrey4281/otus_database/assets/43365575/01297f7a-80bf-4d16-b862-43801b078865)
+![mysql logs](https://github.com/Andrey4281/otus_database/assets/43365575/b71f5c8a-701c-453d-9774-3b595fdde40c)
+3) Connect to otus database and check by using commands:
+   `docker exec -it {id_container_with_mysql) bash`
+   `mysql -u root -p12345 otus`
+   `INSERT INTO unit(name) VALUES ('kg'), ('m');`
+![mysqlscript](https://github.com/Andrey4281/otus_database/assets/43365575/6a933af2-4ece-4b87-a0c0-8638771fa101)
+4) Let's create database for loadtest and prepare test data by using sysbench:
+   `docker exec -it {id_container_with_mysql) bash`
+   `mysql -u root -p12345 otus`
+   `create database test;`
+   `exit`
+   `exit`
+   `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 prepare`
+5) Let's run the test
+   `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
+   ![sysbech_beforeconfig](https://github.com/Andrey4281/otus_database/assets/43365575/112b4605-8f05-4e80-8574-873f31b2d801)
+6) Let's edit config and add option innodb_buffer_pool_size. See my.cnf file.
+   `innodb_buffer_pool_size=10G`'
+7) Restart container with mysql
+   `docker-compose stop`
+   `docker-compose up -d`
+8) Let's run test again:
+   `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=3309 --mysql-user='root' --mysql-password='12345' --mysql-db=test --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
+   ![sysbench_after_optimization](https://github.com/Andrey4281/otus_database/assets/43365575/fd3e40a2-0eb0-4249-971b-476e8fa98029)
+9) You can see that after optimization we have more transaction per seconds and lower 95 percentile 
+10) Let's add additional parameters in our file `my.cnf` and run sysbench again.
+![sysbenchfinal](https://github.com/Andrey4281/otus_database/assets/43365575/d19a5398-32d8-4788-80e7-ca08fa0620e4)
 
