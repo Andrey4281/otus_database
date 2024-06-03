@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  sysbench:
+    container_name: hw9_sysbench
+    image: perconalab/sysbench
+  otusdb:
+    container_name: hw9_otusdb
+    restart: always
+    image: mysql:8.4.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345
+    command:
+      --init-file /init.sql
+    volumes:
+      - data:/var/lib/mysql
+      - ./init.sql:/init.sql
+      - ./custom.conf:/etc/mysql/conf.d
+    expose:
+      - "3306"
+    ports:
+      - "3309:3306"
+
+volumes:
+  data:
