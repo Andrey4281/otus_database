@@ -86,6 +86,12 @@ CREATE TABLE `product_category_ref` (
                                         `product_fk` integer UNSIGNED NOT NULL
 );
 
+CREATE TABLE `customer_history`
+(
+    `id`      bigint UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `history` json                        NOT NULL
+);
+
 ALTER TABLE `product` ADD FOREIGN KEY (`unit_fk`) REFERENCES `unit` (`id`);
 
 ALTER TABLE `product` ADD FOREIGN KEY (`manufacturer_fk`) REFERENCES `manufacturer` (`id`);
