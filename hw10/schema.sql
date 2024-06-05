@@ -56,7 +56,7 @@ CREATE TABLE `email` (
 
 CREATE TABLE `phone` (
                          `id` integer UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                         `phone_number` varchar(10) UNIQUE NOT NULL,
+                         `phone_number` varchar(20) UNIQUE NOT NULL,
     `active` boolean NOT NULL DEFAULT true,
     `main` boolean NOT NULL DEFAULT false,
     `customer_fk` integer UNSIGNED NOT NULL
@@ -73,7 +73,7 @@ CREATE TABLE `product_item` (
 
 CREATE TABLE `credit_card` (
                                `id` integer UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                               `card_number` varchar(20) NOT NULL COMMENT 'Credit card number',
+                               `card_number` varchar(30) NOT NULL COMMENT 'Credit card number',
     `balance` decimal(19,4) NOT NULL COMMENT 'Balance',
     `customer_fk` integer UNSIGNED NOT NULL,
     `main` boolean NOT NULL DEFAULT false,
