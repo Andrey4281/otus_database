@@ -464,3 +464,12 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
 10) Let's add additional parameters in our file `my.cnf` and run sysbench again.
 ![sysbenchfinal](https://github.com/Andrey4281/otus_database/assets/43365575/d19a5398-32d8-4788-80e7-ca08fa0620e4)
 
+# HW10 MySql. Data types.
+1) In all tables I changed `integer` and `bigint` postgresql types designed for primary and foreign keys  by `integer UNSIGNED` and `bigint UNSIGNED` mysql types,
+because primary and foreign keys are monotonically increasing positive numbers.
+2) All varchar types are stayed the same comparing with postgresql
+3) All date types without time are stayed the same comparing with postgresql
+4) All boolean types without time are stayed the same comparing with postgresql
+5) I changed `credit_card.balance`, `product_item.price`, `purchase_item.total_cost` from `decimal(10,2)` to `decimal(19,4)` because money should be stored more precisely
+6) You can find all schema in file schema.sql
+7) You can see example using of json type in file json.sql
