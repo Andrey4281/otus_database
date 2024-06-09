@@ -479,10 +479,7 @@ In our project tables purchase and purchase_item can contain a large amount of d
 Let's try to optimize oltp operation by using partitioning:
 1) See file hw11/script.sql with comments
 2) In the future, as the number of suppliers in the system and batches of goods in warehouses increases, 
-   we can partition the “product_item” table using the hash from the “supplier_fk” field.
+   we can partition the “product_item” table using the hash from the “supplier_fk” field. Additionally, you can add a column for the date the record was created to the "customer_history" table, 
+   and partition by this column by range.
 ![purchase_partitioning](https://github.com/Andrey4281/otus_database/assets/43365575/e9d7897c-e668-469f-8a08-8998a153115d)
 ![purchase_item_partitioning](https://github.com/Andrey4281/otus_database/assets/43365575/544d9dd3-9319-4d2e-92d7-5c6f74948204)
-
- 
-   Additionally, you can add a column for the date the record was created to the "customer_history" table, 
-   and partition by this column by range.
