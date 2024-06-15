@@ -473,3 +473,16 @@ because primary and foreign keys are monotonically increasing positive numbers.
 5) I changed `credit_card.balance`, `product_item.price`, `purchase_item.total_cost` from `decimal(10,2)` to `decimal(19,4)` because money should be stored more precisely
 6) You can find all schema in file schema.sql
 7) You can see example using of json type in file json.sql
+
+# HW11 Partitioning and tablespace.
+In our project tables purchase and purchase_item can contain a large amount of data.
+Let's try to optimize oltp operation by using partitioning:
+1) See file hw11/script.sql with comments
+2) In the future, as the number of suppliers in the system and batches of goods in warehouses increases, 
+   we can partition the “product_item” table using the hash from the “supplier_fk” field. Additionally, you can add a column for the date the record was created to the "customer_history" table, 
+   and partition by this column by range.
+![purchase_by_year](https://github.com/Andrey4281/otus_database/assets/43365575/5e419cb5-7e16-4b64-b766-6bdab5295587)
+![purchase_item_by_year](https://github.com/Andrey4281/otus_database/assets/43365575/2d2d712b-3c5c-4574-99b5-10d1cf58a9ea)
+
+
+
