@@ -485,4 +485,7 @@ Let's try to optimize oltp operation by using partitioning:
 ![purchase_item_by_year](https://github.com/Andrey4281/otus_database/assets/43365575/2d2d712b-3c5c-4574-99b5-10d1cf58a9ea)
 
 
+# HW12 DML.
+1) See files hw12/data.sql and hw12.queries.sql
+
 
