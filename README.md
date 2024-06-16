@@ -488,4 +488,6 @@ Let's try to optimize oltp operation by using partitioning:
 # HW12 DML.
 1) See files hw12/data.sql and hw12.queries.sql
 
+# HW13 CASE, HAVING, ROLLUP, GROUPING().
+1) See files hw13/data.sql and hw13.queries.sql
 
