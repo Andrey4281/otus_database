@@ -490,4 +490,8 @@ Let's try to optimize oltp operation by using partitioning:
 
 # HW13 CASE, HAVING, ROLLUP, GROUPING().
 1) See files hw13/data.sql and hw13.queries.sql
+![query_result_first](https://github.com/Andrey4281/otus_database/assets/43365575/72e133ce-f7bd-444e-adff-4a18f6cc26f3)
+![query_result_second](https://github.com/Andrey4281/otus_database/assets/43365575/b074c423-dac2-4bf6-bd9a-c5a4073a155c)
+
+
 
