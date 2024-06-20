@@ -485,4 +485,14 @@ Let's try to optimize oltp operation by using partitioning:
 ![purchase_item_by_year](https://github.com/Andrey4281/otus_database/assets/43365575/2d2d712b-3c5c-4574-99b5-10d1cf58a9ea)
 
 
+# HW12 DML.
+1) See files hw12/data.sql and hw12.queries.sql
+
+# HW13 CASE, HAVING, ROLLUP, GROUPING().
+1) See files hw13/data.sql and hw13.queries.sql
+![query_result_edited_1](https://github.com/Andrey4281/otus_database/assets/43365575/5f66f14a-0d0e-494f-8727-d9f4fe3c66da)
+![query_result_edited_2](https://github.com/Andrey4281/otus_database/assets/43365575/652f3953-e1ba-4783-b916-3ee72ee9d2cf)
+
+
+
 
