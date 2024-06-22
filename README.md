@@ -438,7 +438,6 @@ MASTER PHYSICAL REPLICATION SLOTS select * from pg_replication_slots;
 ![mysql_docker_ps](https://github.com/Andrey4281/otus_database/assets/43365575/01297f7a-80bf-4d16-b862-43801b078865)
 ![mysql logs](https://github.com/Andrey4281/otus_database/assets/43365575/b71f5c8a-701c-453d-9774-3b595fdde40c)
 3) Connect to otus database and check by using commands:
-   `c`
    `mysql -u root -p12345 otus`
    `INSERT INTO unit(name) VALUES ('kg'), ('m');`
 ![mysqlscript](https://github.com/Andrey4281/otus_database/assets/43365575/6a933af2-4ece-4b87-a0c0-8638771fa101)
