@@ -54,7 +54,6 @@ EXPLAIN SELECT * FROM otus.product_item pi
 --4. Find all purchase by customer:
 CREATE INDEX purchase_customer_id_idx ON otus.purchase (customer_id);
 CREATE INDEX purchase_item_purchase_id_idx ON otus.purchase_item (purchase_id);
-CREATE INDEX product_item_product_fk_price_idx ON otus.product_item (product_fk, price);
 SELECT * FROM otus.purchase p
                           INNER JOIN otus.purchase_item pi ON (p.id = pi.purchase_id)
         WHERE customer_id = 1
