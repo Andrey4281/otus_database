@@ -1,32 +1,31 @@
 -- 1. Full text search:
 ALTER TABLE otus.product ADD COLUMN description text;
-ALTER TABLE otus.product ADD COLUMN full_text_search text;
-CREATE FULLTEXT INDEX product_full_text_search_idx ON otus.product (full_text_search);
+CREATE FULLTEXT INDEX product_description_idx ON otus.product (description);
 -- Examples of select
 --1.a. By manufacturer
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('IdeaPad');
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Apple');
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Lenovo');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('IdeaPad');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Apple');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Lenovo');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('IdeaPad');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('Apple');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('Lenovo');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('IdeaPad');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('Apple');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('Lenovo');
 --2.b By product name
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Macbook');
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('iPhone');
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('IdeaPad');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Macbook');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('iPhone');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('IdeaPad');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('Macbook');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('iPhone');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('IdeaPad');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('Macbook');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('iPhone');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('IdeaPad');
 --3.c By description's words
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('MacOS');
-SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('smartphone');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('MacOS');
-EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(full_text_search) AGAINST ('smartphone');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('MacOS');
+SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('smartphone');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('MacOS');
+EXPLAIN SELECT id, name FROM otus.product WHERE MATCH(description) AGAINST ('smartphone');
 --3.d By product category
-SELECT * FROM otus.product WHERE MATCH(full_text_search) AGAINST ('laptop');
-SELECT * FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Cell phone');
-EXPLAIN SELECT * FROM otus.product WHERE MATCH(full_text_search) AGAINST ('laptop');
-EXPLAIN SELECT * FROM otus.product WHERE MATCH(full_text_search) AGAINST ('Cell phone');
+SELECT * FROM otus.product WHERE MATCH(description) AGAINST ('laptop');
+SELECT * FROM otus.product WHERE MATCH(description) AGAINST ('Cell phone');
+EXPLAIN SELECT * FROM otus.product WHERE MATCH(description) AGAINST ('laptop');
+EXPLAIN SELECT * FROM otus.product WHERE MATCH(description) AGAINST ('Cell phone');
 
 --2. Json index:
 CREATE INDEX customer_history_customerId_idx ON otus.customer_history ((CAST(history ->>'$.customerId' AS char(32)) COLLATE utf8mb4_bin));
