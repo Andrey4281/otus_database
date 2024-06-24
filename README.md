@@ -495,7 +495,7 @@ Let's try to optimize oltp operation by using partitioning:
 
 # HW14, Indexes
 1) See files hw14/data.sql, hw14/indexes.sql, hw14/schema.sql
-![FULL_TEXT_SEARCH](https://github.com/Andrey4281/otus_database/assets/43365575/5f2632fd-cdbb-4426-8b44-22b6fe5d7f58)
+![FULL_TEXT_SEARCH_1](https://github.com/Andrey4281/otus_database/assets/43365575/44c15ae6-1e73-42bd-93a0-9ed19b39f3fb)
 ![JSON_INDEX](https://github.com/Andrey4281/otus_database/assets/43365575/2f4f1367-5b8e-4a9b-bee0-9c1c1551991c)
 ![PRODUCT_INDEX](https://github.com/Andrey4281/otus_database/assets/43365575/f8892966-3c20-4182-8897-742c9800c50d)
 ![PURCHASE_SEARCH](https://github.com/Andrey4281/otus_database/assets/43365575/bbdca785-3d84-4014-a0bb-99ec5323cef2)
