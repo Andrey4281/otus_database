@@ -91,3 +91,9 @@ CALL saveCustomer(
           ]
         }', @customerId
     );
+
+-- Import data
+LOAD DATA
+    INFILE '/var/lib/mysql-files/manufactorer.csv'
+        INTO TABLE supplier
+        FIELDS TERMINATED BY ",";
