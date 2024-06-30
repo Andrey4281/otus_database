@@ -504,6 +504,9 @@ Let's try to optimize oltp operation by using partitioning:
 # HW15, Stored procedures
 1) See files hw15/schema.sql, hw15/procedure.sql
 
+# HW16, Transactions
+1) See files hw16/schema.sql, hw16/procedure.sql
+
 
 
 
