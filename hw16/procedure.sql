@@ -1,48 +1,64 @@
 -- Transaction to create customer
-DELIMITER //
+CREATE PROCEDURE parseCustomerContactToDatabase(
+    parsedContacts text,
+    contactDelimiter varchar(30),
+    contactInsertScriptTemplate varchar(256),
+    customerId INT)
+BEGIN
+    DECLARE
+        pointer INT UNSIGNED DEFAULT 1;
+    DECLARE extractedString VARCHAR(56);
+    WHILE pointer <= (LENGTH(parsedContacts) - LENGTH(REPLACE(parsedContacts, contactDelimiter, '')) + 1)
+        DO
+            SET extractedString =
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(parsedContacts, contactDelimiter, pointer), contactDelimiter, -1);
+            SET @sqlScript = REPLACE(contactInsertScriptTemplate, '${extractedString}', extractedString);
+            SET @sqlScript = REPLACE(@sqlScript, '${customerId}', customerId);
+            SELECT @sqlScript;
+            PREPARE stmp FROM @sqlScript;
+            EXECUTE stmp;
+            SET pointer = pointer + 1;
+        END WHILE;
+    SET pointer = 1;
+END //
 
+DELIMITER ;
+
+DELIMITER //
 CREATE PROCEDURE saveCustomer(
     firstName varchar(30),
     lastName varchar(30),
     emailArray TEXT,
     phoneArray TEXT,
-    cardNumber varchar(20),
+    cardNumber varchar(30),
     balanceVal decimal(19, 4),
     customerHistory json,
     OUT customerId INT UNSIGNED)
 BEGIN
-    DECLARE pointer INT UNSIGNED DEFAULT 1;
-        DECLARE extractedString VARCHAR(56);
-        DECLARE historyId INT UNSIGNED;
-        DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
+    DECLARE
+        historyId INT UNSIGNED;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+        BEGIN
+            ROLLBACK;
+            RESIGNAL;
+        END;
     START TRANSACTION;
     INSERT INTO customer(first_name, last_name) VALUES (firstName, lastName);
     SELECT LAST_INSERT_ID() INTO customerId;
-    WHILE pointer <= (LENGTH(emailArray) - LENGTH(REPLACE(emailArray, ',', '')) + 1)
-    DO
-    SET extractedString = SUBSTRING_INDEX(SUBSTRING_INDEX(emailArray, ',', pointer), ',', -1);
-    INSERT INTO email(email_text, customer_fk) VALUES (extractedString, customerId);
-    SET pointer = pointer + 1;
-END WHILE;
-SET pointer = 1;
-WHILE pointer <= (LENGTH(phoneArray) - LENGTH(REPLACE(phoneArray, ',', '')) + 1)
-DO
-SET extractedString = SUBSTRING_INDEX(SUBSTRING_INDEX(phoneArray, ',', pointer), ',', -1);
-INSERT INTO phone(phone_number, customer_fk) VALUES (extractedString, customerId);
-SET pointer = pointer + 1;
-END WHILE;
-INSERT INTO credit_card(card_number, balance, customer_fk) VALUES (cardNumber, balanceVal, customerId);
-INSERT INTO customer_history(history) VALUES (customerHistory);
-SELECT LAST_INSERT_ID() INTO historyId;
-UPDATE customer_history SET history = JSON_SET(history, '$.customerId', customerId) WHERE id = historyId;
-COMMIT;
+    CALL parseCustomerContactToDatabase(emailArray, ',',
+                                        'INSERT INTO email(email_text, customer_fk) VALUES (''${extractedString}'', ${customerId})',
+                                        customerId);
+    CALL parseCustomerContactToDatabase(phoneArray, ',',
+                                        'INSERT INTO phone(phone_number, customer_fk) VALUES (''${extractedString}'', ${customerId})',
+                                        customerId);
+    INSERT INTO credit_card(card_number, balance, customer_fk) VALUES (cardNumber, balanceVal, customerId);
+    INSERT INTO customer_history(history) VALUES (customerHistory);
+    SELECT LAST_INSERT_ID() INTO historyId;
+    UPDATE customer_history SET history = JSON_SET(history, '$.customerId', customerId) WHERE id = historyId;
+    COMMIT;
 END //
 
-DELIMITER ;
+DELIMITER;
 
 CALL saveCustomer(
         'Vlad',
@@ -95,5 +111,6 @@ CALL saveCustomer(
 -- Import data
 LOAD DATA
     INFILE '/var/lib/mysql-files/manufactorer.csv'
-        INTO TABLE supplier
+        INTO
+        TABLE supplier
         FIELDS TERMINATED BY ",";
