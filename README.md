@@ -501,6 +501,12 @@ Let's try to optimize oltp operation by using partitioning:
 ![PURCHASE_SEARCH](https://github.com/Andrey4281/otus_database/assets/43365575/bbdca785-3d84-4014-a0bb-99ec5323cef2)
 ![CUSTOMER_IDX](https://github.com/Andrey4281/otus_database/assets/43365575/1f136085-6b11-4ba7-88ff-7e229b0aca95)
 
+# HW15, Stored procedures
+1) See files hw15/schema.sql, hw15/procedure.sql
+![FIRST_PROCEDURE](https://github.com/Andrey4281/otus_database/assets/43365575/3f669752-4ab6-43e1-af89-d43766cd15d9)
+![SECOND_PROCEDURE](https://github.com/Andrey4281/otus_database/assets/43365575/7e5c4e7d-c2f0-464b-a2ef-f8d666b704b4)
+
+
 
 
 
