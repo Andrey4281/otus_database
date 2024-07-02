@@ -1,22 +1,22 @@
 -- Transaction to create customer
-CREATE PROCEDURE parseCustomerContactToDatabase(
-    parsedContacts text,
-    contactDelimiter varchar(30),
-    contactInsertScriptTemplate varchar(256),
-    customerId INT)
+DELIMITER //
+
+CREATE PROCEDURE parseStringToTable(
+    parsedString text,
+    stringDelimiter varchar(30))
 BEGIN
-    DECLARE
-        pointer INT UNSIGNED DEFAULT 1;
-    DECLARE extractedString VARCHAR(56);
-    WHILE pointer <= (LENGTH(parsedContacts) - LENGTH(REPLACE(parsedContacts, contactDelimiter, '')) + 1)
+    DECLARE pointer INT UNSIGNED DEFAULT 1;
+    DECLARE extractedString VARCHAR(256);
+    CREATE TABLE IF NOT EXISTS strings (
+                                           `id` integer PRIMARY KEY,
+                                           `value` varchar(256) NOT NULL
+    );
+    TRUNCATE strings;
+    WHILE pointer <= (LENGTH(parsedString) - LENGTH(REPLACE(parsedString, stringDelimiter, '')) + 1)
         DO
             SET extractedString =
-                    SUBSTRING_INDEX(SUBSTRING_INDEX(parsedContacts, contactDelimiter, pointer), contactDelimiter, -1);
-            SET @sqlScript = REPLACE(contactInsertScriptTemplate, '${extractedString}', extractedString);
-            SET @sqlScript = REPLACE(@sqlScript, '${customerId}', customerId);
-            SELECT @sqlScript;
-            PREPARE stmp FROM @sqlScript;
-            EXECUTE stmp;
+                    SUBSTRING_INDEX(SUBSTRING_INDEX(parsedString, stringDelimiter, pointer), stringDelimiter, -1);
+            INSERT INTO strings(id, value) VALUES(pointer, extractedString);
             SET pointer = pointer + 1;
         END WHILE;
     SET pointer = 1;
@@ -25,6 +25,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
+
 CREATE PROCEDURE saveCustomer(
     firstName varchar(30),
     lastName varchar(30),
@@ -35,8 +36,7 @@ CREATE PROCEDURE saveCustomer(
     customerHistory json,
     OUT customerId INT UNSIGNED)
 BEGIN
-    DECLARE
-        historyId INT UNSIGNED;
+    DECLARE historyId INT UNSIGNED;
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
         BEGIN
             ROLLBACK;
@@ -45,12 +45,13 @@ BEGIN
     START TRANSACTION;
     INSERT INTO customer(first_name, last_name) VALUES (firstName, lastName);
     SELECT LAST_INSERT_ID() INTO customerId;
-    CALL parseCustomerContactToDatabase(emailArray, ',',
-                                        'INSERT INTO email(email_text, customer_fk) VALUES (''${extractedString}'', ${customerId})',
-                                        customerId);
-    CALL parseCustomerContactToDatabase(phoneArray, ',',
-                                        'INSERT INTO phone(phone_number, customer_fk) VALUES (''${extractedString}'', ${customerId})',
-                                        customerId);
+    CALL parseStringToTable(emailArray, ',');
+    INSERT INTO email(email_text, customer_fk)
+    SELECT value, customerId FROM strings;
+    CALL parseStringToTable(phoneArray, ',');
+    INSERT INTO phone(phone_number, customer_fk)
+    SELECT value, customerId FROM strings;
+    DROP TABLE strings;
     INSERT INTO credit_card(card_number, balance, customer_fk) VALUES (cardNumber, balanceVal, customerId);
     INSERT INTO customer_history(history) VALUES (customerHistory);
     SELECT LAST_INSERT_ID() INTO historyId;
@@ -58,7 +59,7 @@ BEGIN
     COMMIT;
 END //
 
-DELIMITER;
+DELIMITER ;
 
 CALL saveCustomer(
         'Vlad',
