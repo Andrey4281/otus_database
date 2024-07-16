@@ -507,6 +507,16 @@ Let's try to optimize oltp operation by using partitioning:
 ![SECOND_PROCEDURE](https://github.com/Andrey4281/otus_database/assets/43365575/7e5c4e7d-c2f0-464b-a2ef-f8d666b704b4)
 
 
+# HW16, Transactions
+1) See files hw16/schema.sql, hw16/procedure.sql, hw9/docker-compose.yaml, hw9/manufactorer.csv
+![TRANSACTION_1](https://github.com/Andrey4281/otus_database/assets/43365575/511953fc-020a-4081-bda9-fab3560438b2)
+![TRANSACTION_2](https://github.com/Andrey4281/otus_database/assets/43365575/be9ab48a-4ac4-4fcf-a55d-edab5e3cab98)
+![TRANSACTION_3](https://github.com/Andrey4281/otus_database/assets/43365575/c4e591d6-b647-400e-900a-93abb0d45d77)
+![TRANSACTION_4](https://github.com/Andrey4281/otus_database/assets/43365575/41d62367-5901-4627-8abd-9f96b0a24d43)
+
+
+
+
 
 
 
