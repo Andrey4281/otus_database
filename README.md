@@ -514,6 +514,9 @@ Let's try to optimize oltp operation by using partitioning:
 ![TRANSACTION_3](https://github.com/Andrey4281/otus_database/assets/43365575/c4e591d6-b647-400e-900a-93abb0d45d77)
 ![TRANSACTION_4](https://github.com/Andrey4281/otus_database/assets/43365575/41d62367-5901-4627-8abd-9f96b0a24d43)
 
+# HW17, Query profiling
+1) See files hw17/queries.sql and hw17/indexes.sql
+
 
 
 
