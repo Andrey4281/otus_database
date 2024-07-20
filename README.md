@@ -515,8 +515,8 @@ Let's try to optimize oltp operation by using partitioning:
 ![TRANSACTION_4](https://github.com/Andrey4281/otus_database/assets/43365575/41d62367-5901-4627-8abd-9f96b0a24d43)
 
 # HW17, Query profiling
-1) See files hw17/queries.sql and hw17/indexes.sql
-Query plan before optimization. Let's consider 'EXPLAIN' statements:
+1) See files hw17/queries.sql and hw17/indexes.sql. You can find there initial query and indexes used for optimization.
+2) Query plan before optimization. Let's consider 'EXPLAIN' statements:
 ![explain_before_optimization_simple](https://github.com/user-attachments/assets/2b592b8d-a42d-4401-abb3-a0b7b23c7f1e)
 ![explain_before_optimization_idea](https://github.com/user-attachments/assets/d1a4d669-4480-453f-abaa-892f75d7d20b)
 Let's consider 'EXPLAIN ANALYZE' statemenet:
