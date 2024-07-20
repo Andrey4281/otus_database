@@ -516,6 +516,11 @@ Let's try to optimize oltp operation by using partitioning:
 
 # HW17, Query profiling
 1) See files hw17/queries.sql and hw17/indexes.sql
+Query plan before optimization. Let's consider 'EXPLAIN' statements:
+![explain_before_optimization_simple](https://github.com/user-attachments/assets/2b592b8d-a42d-4401-abb3-a0b7b23c7f1e)
+![explain_before_optimization_idea](https://github.com/user-attachments/assets/d1a4d669-4480-453f-abaa-892f75d7d20b)
+Let's consider 'EXPLAIN ANALYZE' statemenet:
+![explan_analyze_before_optimization_idea](https://github.com/user-attachments/assets/919f28ac-e03f-479e-bfc5-0b62c1897803)
 
 
 
