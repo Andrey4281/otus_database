@@ -521,7 +521,13 @@ Let's try to optimize oltp operation by using partitioning:
 ![explain_before_optimization_idea](https://github.com/user-attachments/assets/d1a4d669-4480-453f-abaa-892f75d7d20b)
 Let's consider 'EXPLAIN ANALYZE' statemenet:
 ![explan_analyze_before_optimization_idea](https://github.com/user-attachments/assets/919f28ac-e03f-479e-bfc5-0b62c1897803)
-
+You can see that Mysql optimizer uses sequence scan for tables 'purchase_item (alias pui)' and 'product_item (alias pi)'.
+Also we can see high total cost for this operation (2346.0 for pi,  10264.0 for pui), high actual total time (20.0 for pi, 13.4 for pui), low percent filtered rows (3.33 for pi, 11.11 for pui), and large amount read rows (131124 for pi, 101600 for pui). Let's try to opmimize query by using indexes. (see file hw17/indexes.sql).
+3) Query plan after optimization. Let's consider 'EXPLAIN' statements:
+![explain_after_optimization](https://github.com/user-attachments/assets/1c46404d-96fa-46e4-9232-9423e9d889c4)
+![explain_after_optimization_idea](https://github.com/user-attachments/assets/aaa17b1f-4aaf-4842-be0f-0435243e053c)
+Let's consider 'EXPLAIN ANALYZE' statemenet:
+![explain_analyze_after_optimization](https://github.com/user-attachments/assets/b780f4c0-f319-4e54-bf06-89e2474a4ea5)
 
 
 
