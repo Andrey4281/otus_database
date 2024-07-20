@@ -515,8 +515,8 @@ Let's try to optimize oltp operation by using partitioning:
 ![TRANSACTION_4](https://github.com/Andrey4281/otus_database/assets/43365575/41d62367-5901-4627-8abd-9f96b0a24d43)
 
 
-
-
-
-
+# HW 18, MySql - InnoDB Cluster
+1) See files hw18/schema.sql, hw18/load_data.sql, hw18/schema.png, hw18/queries.sql
+2) See innodb-cluster docker-compose in innodb-cluster
+mysql -u dbcustomer -pdbcustomer -P 6446 customer
 
