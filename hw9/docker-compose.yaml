@@ -4,6 +4,21 @@ services:
   sysbench:
     container_name: hw9_sysbench
     image: perconalab/sysbench
+  mysql-workbench:
+    image: lscr.io/linuxserver/mysql-workbench:8.0.38
+    container_name: mysql-workbench
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - config:/config
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    cap_add:
+      - IPC_LOCK
+    restart: unless-stopped
   otusdb:
     container_name: hw9_otusdb
     restart: always
@@ -24,3 +39,4 @@ services:
 
 volumes:
   data:
+  config:
