@@ -539,4 +539,5 @@ Our query has become faster in 3.75 times
 1) See files hw18/schema.sql, hw18/load_data.sql, hw18/schema.png, hw18/queries.sql
 2) See innodb-cluster docker-compose in innodb-cluster
 mysql -u dbcustomer -pdbcustomer -P 6446 customer
-
+`sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=6446 --mysql-user='dbcustomer' --mysql-password='dbcustomer' --mysql-db=customer --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 prepare`
+`sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=6446 --mysql-user='dbcustomer' --mysql-password='dbcustomer' --mysql-db=customer --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
