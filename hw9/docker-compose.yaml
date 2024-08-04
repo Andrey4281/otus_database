@@ -32,6 +32,7 @@ services:
       - ./init.sql:/init.sql
       - ./custom.conf:/etc/mysql/conf.d
       - ./manufactorer.csv:/var/lib/mysql-files/manufactorer.csv
+      - ./some_customers.csv:/var/lib/mysql-files/some_customers.csv
     expose:
       - "3306"
     ports:

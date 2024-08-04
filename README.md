@@ -535,3 +535,23 @@ Our query has become faster in 3.75 times
 
 
 
+# HW 18, MySql - InnoDB Cluster
+1) See files hw18/schema.sql, hw18/load_data.sql, hw18/schema.png, hw18/queries.sql
+2) See innodb-cluster docker-compose in innodb-cluster
+Connection via router to innodb-cluster for read-only access:
+![read_access_6447](https://github.com/user-attachments/assets/ea4a6822-0acc-4e7d-b4c3-6341f6d80faa)
+Connection via router to innodb-cluster for read-write access:
+![write_access_6446](https://github.com/user-attachments/assets/57f90fae-e167-44d4-9935-51958dafdf37)
+Trying insert via read-only port:
+![Insert via read_only port](https://github.com/user-attachments/assets/7fa648d3-eef5-4456-9614-cc7d8db34c6b)
+Insert via write port:
+![insert_via_6446](https://github.com/user-attachments/assets/060f1d5d-32b2-483d-a106-04fe9d1397ff)
+Select via read-only port:
+![select_via_read_only](https://github.com/user-attachments/assets/ee82082d-05b5-475e-8fd6-3dbdefbf5da8)
+sysbecnh test:
+![sysbecnhtest](https://github.com/user-attachments/assets/d8ab0c7e-dcc1-485b-acd0-d3ed99021a35)
+`sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=6446 --mysql-user='dbcustomer' --mysql-password='dbcustomer' --mysql-db=customer --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 prepare`
+`sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=6446 --mysql-user='dbcustomer' --mysql-password='dbcustomer' --mysql-db=customer --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
+
+# HW 19, Design
+1) See file hw19/analysis.txt
