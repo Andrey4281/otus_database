@@ -552,3 +552,6 @@ sysbecnh test:
 ![sysbecnhtest](https://github.com/user-attachments/assets/d8ab0c7e-dcc1-485b-acd0-d3ed99021a35)
 `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=6446 --mysql-user='dbcustomer' --mysql-password='dbcustomer' --mysql-db=customer --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 prepare`
 `sysbench /usr/share/sysbench/oltp_read_write.lua --mysql-host=127.0.0.1 --mysql-port=6446 --mysql-user='dbcustomer' --mysql-password='dbcustomer' --mysql-db=customer --db-driver=mysql --tables=1 --table-size=10000000  --threads=80 run`
+
+# HW 19, Design
+1) See file hw19/analysis.txt
