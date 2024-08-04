@@ -29,7 +29,7 @@ CREATE TABLE `supplier` (
 CREATE TABLE otus.purchase (
     `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `customer_id` integer UNSIGNED NOT NULL,
-    `delivary_date` date NOT NULL COMMENT 'Date of delivering the whole order',otus
+    `delivary_date` date NOT NULL COMMENT 'Date of delivering the whole order',
     PRIMARY KEY (id, delivary_date)
 );
 
