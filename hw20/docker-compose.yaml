@@ -1,0 +1,5 @@
+version: '3'
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongodb/mongodb-community-server:6.0-ubi8

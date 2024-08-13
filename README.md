@@ -555,3 +555,13 @@ sysbecnh test:
 
 # HW 19, Design
 1) See file hw19/analysis.txt
+
+# HW20, MongoDB
+1) Let's come in to mongodb docker container. Execute following commands inside hw20 folder:
+   `docker-compose up -d
+    docker exec -it mongodb sh
+    mongosh`
+2) See insert data script in file hw20/insert-data.js
+3) See select data script in file hw20/select-data.js
+4) See update data script in file hw20/update-data.js
+5) See delete data script in file hw20/delete-data.js
