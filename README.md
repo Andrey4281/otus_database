@@ -565,3 +565,24 @@ sysbecnh test:
 3) See select data script in file hw20/select-data.js
 4) See update data script in file hw20/update-data.js
 5) See delete data script in file hw20/delete-data.js
+Insert:
+![MongoDB_Product_insert](https://github.com/user-attachments/assets/a744a8b3-8a17-4f9b-b84a-75181fcdb64c)
+![MongoDB_Product_Item_insert](https://github.com/user-attachments/assets/2f0c08b2-1d5a-4e55-9651-772c2376bda3)
+Select:
+![MongoDB_Product_Item_find](https://github.com/user-attachments/assets/76f7ada9-6f65-42c8-897c-6e42d8cae724)
+![MongoDB_queries_part_1](https://github.com/user-attachments/assets/0fea0473-bf5b-4b3e-8137-99560800c70b)
+![Mongo_aggregation](https://github.com/user-attachments/assets/45e1441b-fda3-421a-a52f-11517f22b16e)
+Update:
+![MongoDB_replace](https://github.com/user-attachments/assets/2cf23c08-28e1-4222-9406-d15be07a407b)
+![MongoDB_update](https://github.com/user-attachments/assets/d280eaa3-0520-4814-bd17-498b50f32651)
+Delete:
+![MongoDB_delete_1](https://github.com/user-attachments/assets/f4e476dc-49cd-485f-86bf-8b997a47906a)
+![MongoDB_delete_2](https://github.com/user-attachments/assets/f766fd00-46e1-47bc-ad20-cfd6098da79e)
+
+
+
+
+
+
+
+
