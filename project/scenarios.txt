@@ -1,0 +1,21 @@
+СЦЕНАРИИ:
+
+a) ПОКУПКА ТОВАРА ПОЛЬЗОВАТЕЛЕМ И СОЗДАНИЕ ЗАКАЗА:
+1) Пользователь ищет интересующие его товары используя:
+(1.1) полнотекстовый поиск (добавить в product новую колонку search на основе description tsvector)
+(1.2) категория товара (product_category)
+(1.3) производитель (manufacturer)
+(1.4) может дополнительно задавать диапазон цены
+(1.5) можно дополнительно искать товары в своем городе и в своей стране по условию
+         INNER JOIN otus.customer_contact_data ccd ON cu.id = ccd.customer_fk
+         INNER JOIN otus.warehouse_contact_data wcd ON ccd.city_fk = wcd.city_fk
+         (город)
+         INNER JOIN otus.customer_contact_data ccd ON cu.id = ccd.customer_fk
+         INNER JOIN otus.warehouse_contact_data wcd ON ccd.country_fk = wcd.country_fk
+         (страна)
+(1.6) в запрос добавить через case тип доставки (на случай если не выбирается в своем городе и стране и тип доставки определен явно)
+(1.7) в запрос добавляем total_cost с учетом доставки и выводим время доставки
+(1.8) можно подумать и добавить фильтр с минимальные временем доставки (у разных поставщиков оно разное)
+
+Для корзины используем рэдис
+
