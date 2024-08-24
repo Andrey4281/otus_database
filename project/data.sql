@@ -1292,3 +1292,13 @@ INSERT INTO otus.region(name, country_fk)
 VALUES ('Eastern China', (SELECT id FROM otus.country WHERE name = 'China')),
        ('South Central China', (SELECT id FROM otus.country WHERE name = 'China')),
        ('Southeast Central States', (SELECT id FROM otus.country WHERE name = 'China'));
+
+INSERT INTO otus.city(name, country_fk, region_fk)
+VALUES ('Yekaterinburg', (SELECT id FROM otus.country WHERE name = 'Russia'), (SELECT id FROM otus.region WHERE name = 'Sverdlovsk region')),
+       ('Moscow', (SELECT id FROM otus.country WHERE name = 'Russia'), (SELECT id FROM otus.region WHERE name = 'Moscow region')),
+       ('Saint-Petersburg', (SELECT id FROM otus.country WHERE name = 'Russia'), (SELECT id FROM otus.region WHERE name = 'Leningrad region'));
+
+INSERT INTO otus.city(name, country_fk, region_fk)
+VALUES ('Las Vegas', (SELECT id FROM otus.country WHERE name = 'USA'), (SELECT id FROM otus.region WHERE name = 'Mountain States')),
+       ('Washington', (SELECT id FROM otus.country WHERE name = 'USA'), (SELECT id FROM otus.region WHERE name = 'South Atlantic States')),
+       ('Jacksonville', (SELECT id FROM otus.country WHERE name = 'USA'), (SELECT id FROM otus.region WHERE name = 'Southeast Central States'));
