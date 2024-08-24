@@ -40,7 +40,8 @@ CREATE TABLE otus."product" (
                                 "name" varchar(50) NOT NULL,
                                 "manufacturer_fk" int NOT NULL,
                                 "unit_fk" int NOT NULL,
-                                "description" text
+                                "description" text,
+                                "product_search" tsvector
 ) TABLESPACE ssdOrder;
 
 CREATE TABLE otus."product_category" (
