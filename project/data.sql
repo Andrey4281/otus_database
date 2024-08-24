@@ -44,3 +44,7 @@ UPDATE otus.product SET product_search = to_tsvector('english', name || ' ' || d
 
 INSERT INTO otus.product_category_ref(product_category_fk, product_fk)
 SELECT 1, product.id FROM otus.product;
+
+INSERT INTO otus.supplier(name) VALUES ('Entrepreneur USA'), ('Entrepreneur Russia'), ('Entrepreneur China');
+
+INSERT INTO otus.warehouse(supplier_fk) VALUES (1), (1), (1), (2), (2), (3), (3), (3);
