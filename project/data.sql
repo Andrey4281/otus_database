@@ -1272,3 +1272,23 @@ INSERT INTO otus.delivery_kind(supplier_fk, name, cost, duration)
 VALUES (2, 'ORDINARY', 400.00, '2 Days');
 INSERT INTO otus.delivery_kind(supplier_fk, name, cost, duration)
 VALUES (3, 'ORDINARY', 500.00, '1 Days');
+
+INSERT INTO otus.country(name)
+VALUES ('USA'),
+       ('Russia'),
+       ('China');
+
+INSERT INTO otus.region(name, country_fk)
+VALUES ('Sverdlovsk region', (SELECT id FROM otus.country WHERE name = 'Russia')),
+       ('Moscow region', (SELECT id FROM otus.country WHERE name = 'Russia')),
+       ('Leningrad region', (SELECT id FROM otus.country WHERE name = 'Russia'));
+
+INSERT INTO otus.region(name, country_fk)
+VALUES ('Mountain States', (SELECT id FROM otus.country WHERE name = 'USA')),
+       ('South Atlantic States', (SELECT id FROM otus.country WHERE name = 'USA')),
+       ('Southeast Central States', (SELECT id FROM otus.country WHERE name = 'USA'));
+
+INSERT INTO otus.region(name, country_fk)
+VALUES ('Eastern China', (SELECT id FROM otus.country WHERE name = 'China')),
+       ('South Central China', (SELECT id FROM otus.country WHERE name = 'China')),
+       ('Southeast Central States', (SELECT id FROM otus.country WHERE name = 'China'));
