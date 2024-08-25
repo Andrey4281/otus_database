@@ -1360,3 +1360,6 @@ WITH usa_country AS (SELECT id as country_id
      )
 INSERT INTO otus.warehouse_contact_data(warehouse_fk, country_fk, region_fk, city_fk, street_fk, building_number_fk, postal_code_fk)
 SELECT 1, all_data.country_id, all_data.region_id, all_data.city_id, all_data.street_id, all_data.building_id, all_data.code_id FROM all_data;
+
+INSERT INTO otus.supplier_pick_up_point_contact_data(supplier_pick_up_point_fk, country_fk, region_fk, city_fk, street_fk, building_number_fk, postal_code_fk)
+VALUES (1, 1,5,10,6,6,6), (2, 1,6,8,4,4,4), (3, 1,4,10,6,6,6), (4,2,3,3,3,3,3), (5, 2,3,1,1,1,1), (6, 3,7,11,7,7,7), (7, 3,8,12,8,8,8), (8, 3,8,12,8,8,8);
