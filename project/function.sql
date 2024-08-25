@@ -1,5 +1,6 @@
 CREATE OR REPLACE FUNCTION getOrdersReport(leftBorderDeliveryDate date,
                                            rightBorderDeliveryDate date,
+                                           supplierId int,
                                            groupingClause otus.reportGroupingClause DEFAULT 'product')
     RETURNS TABLE
             (
@@ -19,7 +20,7 @@ FROM otus.order_item oi
          INNER JOIN otus.manufacturer m ON p.manufacturer_fk = m.id
          INNER JOIN otus.product_category_ref pcr ON pcr.product_fk = p.id
          INNER JOIN otus.product_category pc ON pc.id = pcr.product_category_fk
-WHERE oi.delivery_date BETWEEN  ''${leftBorderDeliveryDate}'' AND ''${rightBorderDeliveryDate}''
+WHERE oi.delivery_date BETWEEN  ''${leftBorderDeliveryDate}'' AND ''${rightBorderDeliveryDate}'' AND pi.supplier_fk = ${supplierId}
 GROUP BY ${group.column}';
 BEGIN
     IF (leftBorderDeliveryDate IS NULL) THEN
@@ -28,8 +29,12 @@ END IF;
 IF (rightBorderDeliveryDate IS NULL) THEN
         RAISE EXCEPTION 'NULL is not allowed for rightBorderDeliveryDate.';
 END IF;
+IF (supplierId IS NULL) THEN
+        RAISE EXCEPTION 'NULL is not allowed for supplierId.';
+end if;
 baseQuery = replace(baseQuery, '${leftBorderDeliveryDate}', leftBorderDeliveryDate::varchar);
 baseQuery = replace(baseQuery, '${rightBorderDeliveryDate}', rightBorderDeliveryDate::varchar);
+baseQuery = replace(baseQuery, '${supplierId}', supplierId::varchar);
 IF (groupingClause = 'product') THEN
         baseQuery = replace(baseQuery, '${group.column}', 'p.name');
 ELSEIF (groupingClause = 'manufacturer') THEN
@@ -41,4 +46,4 @@ RETURN QUERY EXECUTE baseQuery;
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT group_column, totalCost, totalAmount FROM getOrdersReport('2024-01-01', '2028-01-01', 'product');
+SELECT group_column, totalCost, totalAmount FROM getOrdersReport('2024-01-01', '2028-01-01', 1, 'product');
