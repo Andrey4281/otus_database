@@ -1363,3 +1363,87 @@ SELECT 1, all_data.country_id, all_data.region_id, all_data.city_id, all_data.st
 
 INSERT INTO otus.supplier_pick_up_point_contact_data(supplier_pick_up_point_fk, country_fk, region_fk, city_fk, street_fk, building_number_fk, postal_code_fk)
 VALUES (1, 1,5,10,6,6,6), (2, 1,6,8,4,4,4), (3, 1,4,10,6,6,6), (4,2,3,3,3,3,3), (5, 2,3,1,1,1,1), (6, 3,7,11,7,7,7), (7, 3,8,12,8,8,8), (8, 3,8,12,8,8,8);
+
+DO $$
+    DECLARE cust_id bigint;
+BEGIN
+    FOR cust_id IN SELECT id FROM otus.customer WHERE customer.id <= 33923
+    LOOP
+                   WITH usa_country AS (SELECT id as country_id
+                       FROM otus.country
+                       WHERE name = 'USA'),
+                       usa_region AS (SELECT id as region_id
+                       FROM otus.region
+                       WHERE country_fk IN (SELECT country_id FROM usa_country)
+                       ORDER BY random()
+                       LIMIT 1),
+                       usa_city AS (SELECT id as city_id
+                       FROM otus.city
+                       WHERE country_fk IN (SELECT country_id FROM usa_country)
+                       ORDER BY random()
+                       LIMIT 1),
+                       usa_street AS (
+                       SELECT id as street_id FROM otus.street
+                       WHERE city_fk IN (SELECT city_id FROM usa_city) ORDER BY random()
+                       LIMIT 1
+                       ),
+                       usa_building_number AS (
+                       SELECT id as building_id, postal_code_fk as postal_code_fk FROM otus.building_number
+                       WHERE building_number.street_fk IN (SELECT street_id FROM usa_street) ORDER BY random()
+                       LIMIT 1
+                       ),
+                       usa_postal_code AS (
+                       SELECT id as code_id FROM otus.postal_code
+                       WHERE postal_code.id IN (SELECT postal_code_fk FROM usa_building_number)
+                       ORDER BY random()
+                       LIMIT 1
+                       ),
+                       all_data AS (
+                       SELECT country_id, region_id, city_id, street_id, building_id, code_id FROM usa_country, usa_region, usa_city, usa_street, usa_building_number, usa_postal_code
+                       )
+INSERT INTO otus.customer_contact_data(customer_fk, country_fk, region_fk, city_fk, street_fk, building_number_fk, postal_code_fk)
+SELECT cust_id, country_id, region_id, city_id, street_id, building_id, code_id FROM all_data;
+end loop;
+END$$;
+
+DO $$
+    DECLARE cust_id bigint;
+BEGIN
+    FOR cust_id IN SELECT id FROM otus.customer WHERE customer.id > 33923 AND customer.id <= 67846
+    LOOP
+                   WITH usa_country AS (SELECT id as country_id
+                       FROM otus.country
+                       WHERE name = 'Russia'),
+                       usa_region AS (SELECT id as region_id
+                       FROM otus.region
+                       WHERE country_fk IN (SELECT country_id FROM usa_country)
+                       ORDER BY random()
+                       LIMIT 1),
+                       usa_city AS (SELECT id as city_id
+                       FROM otus.city
+                       WHERE country_fk IN (SELECT country_id FROM usa_country)
+                       ORDER BY random()
+                       LIMIT 1),
+                       usa_street AS (
+                       SELECT id as street_id FROM otus.street
+                       WHERE city_fk IN (SELECT city_id FROM usa_city) ORDER BY random()
+                       LIMIT 1
+                       ),
+                       usa_building_number AS (
+                       SELECT id as building_id, postal_code_fk as postal_code_fk FROM otus.building_number
+                       WHERE building_number.street_fk IN (SELECT street_id FROM usa_street) ORDER BY random()
+                       LIMIT 1
+                       ),
+                       usa_postal_code AS (
+                       SELECT id as code_id FROM otus.postal_code
+                       WHERE postal_code.id IN (SELECT postal_code_fk FROM usa_building_number)
+                       ORDER BY random()
+                       LIMIT 1
+                       ),
+                       all_data AS (
+                       SELECT country_id, region_id, city_id, street_id, building_id, code_id FROM usa_country, usa_region, usa_city, usa_street, usa_building_number, usa_postal_code
+                       )
+INSERT INTO otus.customer_contact_data(customer_fk, country_fk, region_fk, city_fk, street_fk, building_number_fk, postal_code_fk)
+SELECT cust_id, country_id, region_id, city_id, street_id, building_id, code_id FROM all_data;
+end loop;
+END$$;
