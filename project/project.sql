@@ -362,3 +362,6 @@ ALTER TABLE otus."refund" ADD FOREIGN KEY ("supplier_fk") REFERENCES otus."suppl
 ALTER TABLE otus."refund" ADD FOREIGN KEY ("customer_fk") REFERENCES otus."customer" ("id");
 
 ALTER TABLE otus.warehouse ADD FOREIGN KEY ("supplier_fk") REFERENCES otus."supplier" ("id");
+
+CREATE UNIQUE INDEX "warehouse_contact_data_warehouse_fk_idx" ON otus."warehouse_contact_data" ("warehouse_fk");
+
