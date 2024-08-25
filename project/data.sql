@@ -1447,3 +1447,19 @@ INSERT INTO otus.customer_contact_data(customer_fk, country_fk, region_fk, city_
 SELECT cust_id, country_id, region_id, city_id, street_id, building_id, code_id FROM all_data;
 end loop;
 END$$;
+
+DO $$
+    DECLARE counter bigint;
+DECLARE supplier_id int;
+DECLARE product_id int;
+DECLARE warehouse_id int;
+BEGIN
+    FOR counter IN 1..300000
+    LOOP
+SELECT s.id INTO supplier_id FROM otus.supplier s ORDER BY random() LIMIT 1;
+SELECT p.id INTO product_id FROM otus.product p ORDER BY random() LIMIT 1;
+SELECT w.id INTO warehouse_id FROM otus.warehouse w WHERE w.supplier_fk = supplier_id ORDER BY random() LIMIT 1;
+INSERT INTO otus.product_item(supplier_fk, product_fk, price, amount, warehouse_fk)
+VALUES (supplier_id, product_id, (random() * 1000000)::numeric(10, 0), (random() * 100)::numeric(10, 0), warehouse_id);
+end loop;
+END$$;
