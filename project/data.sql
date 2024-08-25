@@ -1463,3 +1463,48 @@ INSERT INTO otus.product_item(supplier_fk, product_fk, price, amount, warehouse_
 VALUES (supplier_id, product_id, (random() * 1000000)::numeric(10, 0), (random() * 100)::numeric(10, 0), warehouse_id);
 end loop;
 END$$;
+
+DO
+    $$
+    DECLARE
+        counter         int;
+DECLARE cust_id int;
+BEGIN
+    FOR counter IN 1..10
+            LOOP
+                FOR cust_id IN SELECT c.id FROM otus.customer c
+    LOOP
+INSERT INTO otus."order"(customer_id, delivary_date)
+VALUES (cust_id, (select DATE(timestamp '2024-01-01 00:00:00' +
+                              random() * (timestamp '2028-01-01 00:00:00' -
+                                          timestamp '2024-01-01 00:00:00'))));
+end loop;
+end loop;
+END
+$$;
+
+DO
+    $$
+    DECLARE
+        o_id                          bigint;
+DECLARE product_i_id           bigint;
+DECLARE s_id               int;
+DECLARE deliver_kind_id          int;
+DECLARE s_pick_up_point_id int;
+BEGIN
+    FOR o_id IN SELECT o.id FROM otus.order o
+    LOOP
+SELECT id, supplier_fk
+INTO product_i_id, s_id
+FROM otus.product_item
+ORDER BY random()
+LIMIT 1;
+SELECT dc.id INTO deliver_kind_id FROM otus.delivery_kind dc WHERE dc.supplier_fk = s_id;
+SELECT spp.id INTO s_pick_up_point_id FROM otus.supplier_pick_up_point spp WHERE spp.supplier_fk = s_id;
+INSERT INTO otus.order_item(order_id, product_item_id, delivery_kind_id, supplier_pick_up_point_id, amount, total_cost, delivery_date, status)
+values (o_id, product_i_id, deliver_kind_id, s_pick_up_point_id, (random() * 10)::numeric(10, 0), (random() * 2000000)::numeric(10, 0), (select DATE(timestamp '2024-01-01 00:00:00' +
+                                                                                                                                                     random() * (timestamp '2028-01-01 00:00:00' -
+                                                                                                                                                                 timestamp '2024-01-01 00:00:00'))), 'PAID');
+end loop;
+END
+$$;
