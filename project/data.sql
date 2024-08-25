@@ -1305,3 +1305,20 @@ VALUES ('Las Vegas', (SELECT id FROM otus.country WHERE name = 'USA'), (SELECT i
 INSERT INTO otus.city(name, country_fk, region_fk)
 VALUES ('Hangzhou', (SELECT id FROM otus.country WHERE name = 'China'), (SELECT id FROM otus.region WHERE name = 'Eastern China')),
        ('Nanchang', (SELECT id FROM otus.country WHERE name = 'China'), (SELECT id FROM otus.region WHERE name = 'South Central China'));
+
+INSERT INTO otus.street(name, city_fk)
+VALUES ('Lenin street', (SELECT id FROM otus.city WHERE city.name = 'Yekaterinburg')),
+       ('Arbat street', (SELECT id FROM otus.city WHERE city.name = 'Moscow')),
+       ('Nevsky Prospect Street', (SELECT id FROM otus.city WHERE city.name = 'Saint-Petersburg')),
+       ('Fremont Street', (SELECT id FROM otus.city WHERE city.name = 'Las Vegas')),
+       ('Embassy Row', (SELECT id FROM otus.city WHERE city.name = 'Washington')),
+       ('North Newnan Street', (SELECT id FROM otus.city WHERE city.name = 'Jacksonville')),
+       ('Hefang Street', (SELECT id FROM otus.city WHERE city.name = 'Hangzhou')),
+       ('Nanchang Street', (SELECT id FROM otus.city WHERE city.name = 'Nanchang'));
+
+INSERT INTO otus.postal_code(name)
+VALUES ('A1'), ('A2'), ('A3'), ('A4'), ('A5'), ('A6'), ('A7'), ('A8');
+
+INSERT INTO otus.building_number(number, street_fk, postal_code_fk)
+VALUES ('B1', 1, 1), ('B2', 2, 2), ('B3', 3, 3), ('B4', 4, 4),
+       ('B5', 5, 5), ('B6', 6, 6), ('B7', 7, 7), ('B8', 8, 8);
