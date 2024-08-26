@@ -54,12 +54,12 @@ CREATE OR REPLACE FUNCTION getGoods(search varchar(256),
                                     lowerBorderPrice decimal(19, 4),
                                     rightBorderPrice decimal(19, 4),
                                     customerId int,
+                                    sortColumn varchar(50),
+                                    lim int,
+                                    offs int,
                                     isDeliveryInTheSameCountry boolean default false,
                                     isDeliveryInTheSameCity boolean default false,
-                                    sortColumn varchar(50),
-                                    sortDirectionIsAsc boolean,
-                                    limitValue int,
-                                    offsetValue int)
+                                    sortDirectionIsAsc boolean default true)
     RETURNS TABLE
             (
                 productName varchar,
@@ -90,6 +90,10 @@ ${warehouseJoin}
 ${warehouseContactDataJoin}
 WHERE 1=1';
 DECLARE filters varchar(4024) = '';
+DECLARE sort varchar(1024) = '';
+DECLARE limitValue varchar(1024) = '';
+DECLARE offsetValue varchar(1024) = '';
+DECLARE orderDirection varchar(10) = '';
 BEGIN
     IF (search IS NOT NULL) THEN
         filters = CONCAT(filters, REPLACE(' AND p.product_search @@ to_tsquery(''english'', ''${value}'')', '${value}', search));
@@ -119,37 +123,17 @@ ELSE
         filters = REPLACE(filters, '${warehouseJoin}', '');
 filters = REPLACE(filters, '${warehouseContactDataJoin}', '');
 END IF;
+IF (sortColumn IS NOT NULL) THEN
+        orderDirection = CASE WHEN (sortDirectionIsAsc = true) THEN 'ASC' ELSE 'DESC' END;
+sort = CONCAT(' ORDER BY ', sortColumn, ' ', orderDirection);
+END IF;
+IF (limitValue IS NOT NULL) THEN
+        limitValue = CONCAT(limitValue, REPLACE(' LIMIT ${value}', '${value}', lim));
+END IF;
+IF (limitValue IS NOT NULL AND offsetValue IS NOT NULL) THEN
+        offsetValue = CONCAT(offsetValue, REPLACE(' OFFSET ${value}', '${value}', offs));
+END IF;
+baseQuery = CONCAT(baseQuery, filters, sort, limitValue, offsetValue);
+RETURN QUERY EXECUTE baseQuery;
 END;
 $$ LANGUAGE plpgsql;
-
--- AND p.product_search @@ to_tsquery('english', '${search}')
---   AND pc.id = ${categoryId}
--- AND m.id = ${manufacturerId}
--- AND pi.price > ${lowerBorderPrice} AND pi.price <: ${rightBorderPrice}
--- AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${customerId})
--- AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${customerId})'
-
--- TODO sortDirection, Limit, Offset
-SELECT p.name AS productName,
-       p.description AS productDescription,
-       m.name AS manufacturerName,
-       pc.name AS productCategoryName,
-       pi.price AS productItemPrice,
-       dk.cost AS deliveryCost,
-       dk.duration AS deliveryDuration
-FROM otus.product_item pi
-         INNER JOIN otus.supplier s ON (s.id = pi.supplier_fk)
-         INNER JOIN otus.delivery_kind dk ON s.id = dk.supplier_fk
-         INNER JOIN otus.product p ON (pi.product_fk = p.id)
-         INNER JOIN otus.manufacturer m ON (m.id = p.manufacturer_fk)
-         INNER JOIN otus.product_category_ref pcr ON (pcr.product_fk = p.id)
-         INNER JOIN otus.product_category pc ON (pc.id = pcr.product_category_fk)
-         INNER JOIN otus.warehouse w ON (w.supplier_fk = s.id)
-         INNER JOIN otus.warehouse_contact_data wcd ON (wcd.warehouse_fk = w.id)
-WHERE 1=1
-  AND p.product_search @@ to_tsquery('''english''', :search)
-  AND pc.id = :categoryId
-  AND m.id = :manufacturerId
-  AND pi.price > :lowerBorderPrice AND pi.price <: rightBorderPrice
-AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = :customerId)
-AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = :customerId);
