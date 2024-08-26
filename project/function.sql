@@ -47,3 +47,109 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT group_column, totalCost, totalAmount FROM getOrdersReport('2024-01-01', '2028-01-01', 1, 'product');
+
+CREATE OR REPLACE FUNCTION getGoods(search varchar(256),
+                                    categoryId int,
+                                    manufacturerId int,
+                                    lowerBorderPrice decimal(19, 4),
+                                    rightBorderPrice decimal(19, 4),
+                                    customerId int,
+                                    isDeliveryInTheSameCountry boolean default false,
+                                    isDeliveryInTheSameCity boolean default false,
+                                    sortColumn varchar(50),
+                                    sortDirectionIsAsc boolean,
+                                    limitValue int,
+                                    offsetValue int)
+    RETURNS TABLE
+            (
+                productName varchar,
+                productDescription  text,
+                manufacturerName  varchar,
+                productCategoryName varchar,
+                productItemPrice numeric(19, 4),
+                deliveryCost numeric(19, 4),
+                deliveryDuration interval
+            )
+AS
+$$
+DECLARE baseQuery varchar(4024) = 'SELECT p.name AS productName,
+       p.description AS productDescription,
+       m.name AS manufacturerName,
+       pc.name AS productCategoryName,
+       pi.price AS productItemPrice,
+       dk.cost AS deliveryCost,
+       dk.duration AS deliveryDuration
+FROM otus.product_item pi
+INNER JOIN otus.supplier s ON (s.id = pi.supplier_fk)
+INNER JOIN otus.delivery_kind dk ON s.id = dk.supplier_fk
+INNER JOIN otus.product p ON (pi.product_fk = p.id)
+INNER JOIN otus.manufacturer m ON (m.id = p.manufacturer_fk)
+INNER JOIN otus.product_category_ref pcr ON (pcr.product_fk = p.id)
+INNER JOIN otus.product_category pc ON (pc.id = pcr.product_category_fk)
+${warehouseJoin}
+${warehouseContactDataJoin}
+WHERE 1=1';
+DECLARE filters varchar(4024) = '';
+BEGIN
+    IF (search IS NOT NULL) THEN
+        filters = CONCAT(filters, REPLACE(' AND p.product_search @@ to_tsquery(''english'', ''${value}'')', '${value}', search));
+END IF;
+IF (categoryId IS NOT NULL) THEN
+        filters = CONCAT(filters, REPLACE(' AND pc.id = ${value}', '${value}', categoryId::varchar));
+END IF;
+IF (manufacturerId IS NOT NULL) THEN
+        filters = CONCAT(filters, REPLACE(' AND m.id = ${value}', '${value}', manufacturerId::varchar));
+END IF;
+IF (lowerBorderPrice IS NOT NULL) THEN
+        filters = CONCAT(filters, REPLACE(' AND pi.price > ${value}', '${value}', lowerBorderPrice));
+END IF;
+IF (rightBorderPrice IS NOT NULL) THEN
+        filters = CONCAT(filters, REPLACE(' AND pi.price < ${value}', '${value}', rightBorderPrice));
+END IF;
+IF (isDeliveryInTheSameCountry = true OR isDeliveryInTheSameCity = true) THEN
+        filters = REPLACE(filters, '${warehouseJoin}', ' INNER JOIN otus.warehouse w ON (w.supplier_fk = s.id)');
+filters = REPLACE(filters, '${warehouseContactDataJoin}', ' INNER JOIN otus.warehouse_contact_data wcd ON (wcd.warehouse_fk = w.id)');
+IF (isDeliveryInTheSameCountry = true) THEN
+            filters = CONCAT(filters, REPLACE(' AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${value})', '${value}', customerId::varchar));
+END IF;
+IF (isDeliveryInTheSameCity = true) THEN
+            filters = CONCAT(filters, REPLACE(' AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${value})', '${value}', customerId::varchar));
+END IF;
+ELSE
+        filters = REPLACE(filters, '${warehouseJoin}', '');
+filters = REPLACE(filters, '${warehouseContactDataJoin}', '');
+END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- AND p.product_search @@ to_tsquery('english', '${search}')
+--   AND pc.id = ${categoryId}
+-- AND m.id = ${manufacturerId}
+-- AND pi.price > ${lowerBorderPrice} AND pi.price <: ${rightBorderPrice}
+-- AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${customerId})
+-- AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${customerId})'
+
+-- TODO sortDirection, Limit, Offset
+SELECT p.name AS productName,
+       p.description AS productDescription,
+       m.name AS manufacturerName,
+       pc.name AS productCategoryName,
+       pi.price AS productItemPrice,
+       dk.cost AS deliveryCost,
+       dk.duration AS deliveryDuration
+FROM otus.product_item pi
+         INNER JOIN otus.supplier s ON (s.id = pi.supplier_fk)
+         INNER JOIN otus.delivery_kind dk ON s.id = dk.supplier_fk
+         INNER JOIN otus.product p ON (pi.product_fk = p.id)
+         INNER JOIN otus.manufacturer m ON (m.id = p.manufacturer_fk)
+         INNER JOIN otus.product_category_ref pcr ON (pcr.product_fk = p.id)
+         INNER JOIN otus.product_category pc ON (pc.id = pcr.product_category_fk)
+         INNER JOIN otus.warehouse w ON (w.supplier_fk = s.id)
+         INNER JOIN otus.warehouse_contact_data wcd ON (wcd.warehouse_fk = w.id)
+WHERE 1=1
+  AND p.product_search @@ to_tsquery('''english''', :search)
+  AND pc.id = :categoryId
+  AND m.id = :manufacturerId
+  AND pi.price > :lowerBorderPrice AND pi.price <: rightBorderPrice
+AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = :customerId)
+AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = :customerId);
