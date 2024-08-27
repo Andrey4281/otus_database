@@ -62,17 +62,18 @@ CREATE OR REPLACE FUNCTION getGoods(search varchar(256),
                                     sortDirectionIsAsc boolean default true)
     RETURNS TABLE
             (
-                productName varchar,
+                productName         varchar,
                 productDescription  text,
-                manufacturerName  varchar,
+                manufacturerName    varchar,
                 productCategoryName varchar,
-                productItemPrice numeric(19, 4),
-                deliveryCost numeric(19, 4),
-                deliveryDuration interval
+                productItemPrice    numeric(19, 4),
+                deliveryCost        numeric(19, 4),
+                deliveryDuration    interval
             )
 AS
 $$
-DECLARE baseQuery varchar(4024) = 'SELECT p.name AS productName,
+DECLARE
+    baseQuery      varchar(4024) = 'SELECT p.name AS productName,
        p.description AS productDescription,
        m.name AS manufacturerName,
        pc.name AS productCategoryName,
@@ -89,14 +90,15 @@ INNER JOIN otus.product_category pc ON (pc.id = pcr.product_category_fk)
 ${warehouseJoin}
 ${warehouseContactDataJoin}
 WHERE 1=1';
-DECLARE filters varchar(4024) = '';
-DECLARE sort varchar(1024) = '';
-DECLARE limitValue varchar(1024) = '';
-DECLARE offsetValue varchar(1024) = '';
-DECLARE orderDirection varchar(10) = '';
+filters        varchar(4024) = '';
+sort           varchar(1024) = '';
+limitValue     varchar(1024) = '';
+offsetValue    varchar(1024) = '';
+orderDirection varchar(10)   = '';
 BEGIN
     IF (search IS NOT NULL) THEN
-        filters = CONCAT(filters, REPLACE(' AND p.product_search @@ to_tsquery(''english'', ''${value}'')', '${value}', search));
+        filters = CONCAT(filters,
+                         REPLACE(' AND p.product_search @@ to_tsquery(''english'', ''${value}'')', '${value}', search));
 END IF;
 IF (categoryId IS NOT NULL) THEN
         filters = CONCAT(filters, REPLACE(' AND pc.id = ${value}', '${value}', categoryId::varchar));
@@ -105,35 +107,50 @@ IF (manufacturerId IS NOT NULL) THEN
         filters = CONCAT(filters, REPLACE(' AND m.id = ${value}', '${value}', manufacturerId::varchar));
 END IF;
 IF (lowerBorderPrice IS NOT NULL) THEN
-        filters = CONCAT(filters, REPLACE(' AND pi.price > ${value}', '${value}', lowerBorderPrice));
+        filters = CONCAT(filters, REPLACE(' AND pi.price > ${value}', '${value}', lowerBorderPrice::varchar));
 END IF;
 IF (rightBorderPrice IS NOT NULL) THEN
-        filters = CONCAT(filters, REPLACE(' AND pi.price < ${value}', '${value}', rightBorderPrice));
+        filters = CONCAT(filters, REPLACE(' AND pi.price < ${value}', '${value}', rightBorderPrice::varchar));
 END IF;
 IF (isDeliveryInTheSameCountry = true OR isDeliveryInTheSameCity = true) THEN
-        filters = REPLACE(filters, '${warehouseJoin}', ' INNER JOIN otus.warehouse w ON (w.supplier_fk = s.id)');
-filters = REPLACE(filters, '${warehouseContactDataJoin}', ' INNER JOIN otus.warehouse_contact_data wcd ON (wcd.warehouse_fk = w.id)');
+        baseQuery = REPLACE(baseQuery, '${warehouseJoin}', ' INNER JOIN otus.warehouse w ON (w.supplier_fk = s.id)');
+baseQuery = REPLACE(baseQuery, '${warehouseContactDataJoin}',
+    ' INNER JOIN otus.warehouse_contact_data wcd ON (wcd.warehouse_fk = w.id)');
 IF (isDeliveryInTheSameCountry = true) THEN
-            filters = CONCAT(filters, REPLACE(' AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${value})', '${value}', customerId::varchar));
+            filters = CONCAT(filters, REPLACE(
+                    ' AND wcd.country_fk IN (SELECT ccd.country_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${value})',
+                    '${value}', customerId::varchar));
 END IF;
 IF (isDeliveryInTheSameCity = true) THEN
-            filters = CONCAT(filters, REPLACE(' AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${value})', '${value}', customerId::varchar));
+            filters = CONCAT(filters, REPLACE(
+                    ' AND wcd.street_fk IN (SELECT ccd.street_fk FROM otus.customer_contact_data ccd WHERE ccd.customer_fk = ${value})',
+                    '${value}', customerId::varchar));
 END IF;
 ELSE
-        filters = REPLACE(filters, '${warehouseJoin}', '');
-filters = REPLACE(filters, '${warehouseContactDataJoin}', '');
+        baseQuery = REPLACE(baseQuery, '${warehouseJoin}', '');
+baseQuery = REPLACE(baseQuery, '${warehouseContactDataJoin}', '');
 END IF;
 IF (sortColumn IS NOT NULL) THEN
         orderDirection = CASE WHEN (sortDirectionIsAsc = true) THEN 'ASC' ELSE 'DESC' END;
 sort = CONCAT(' ORDER BY ', sortColumn, ' ', orderDirection);
 END IF;
 IF (limitValue IS NOT NULL) THEN
-        limitValue = CONCAT(limitValue, REPLACE(' LIMIT ${value}', '${value}', lim));
+        limitValue = CONCAT(limitValue, REPLACE(' LIMIT ${value}', '${value}', lim::varchar));
 END IF;
 IF (limitValue IS NOT NULL AND offsetValue IS NOT NULL) THEN
-        offsetValue = CONCAT(offsetValue, REPLACE(' OFFSET ${value}', '${value}', offs));
+        offsetValue = CONCAT(offsetValue, REPLACE(' OFFSET ${value}', '${value}', offs::varchar));
 END IF;
 baseQuery = CONCAT(baseQuery, filters, sort, limitValue, offsetValue);
+RAISE NOTICE 'Query executed: %', baseQuery;
 RETURN QUERY EXECUTE baseQuery;
 END;
 $$ LANGUAGE plpgsql;
+
+SELECT *
+FROM getGoods('Refrigerator', null, null, null, null, null, null, null, null);
+
+SELECT *
+FROM getGoods('Refrigerator', 1, null, null, null, null, null, null, null);
+
+SELECT *
+FROM getGoods('Refrigerator', 1, 2, 50000, 90000, null, null, null, null);
