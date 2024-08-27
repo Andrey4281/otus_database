@@ -154,3 +154,6 @@ FROM getGoods('Refrigerator', 1, null, null, null, null, null, null, null);
 
 SELECT *
 FROM getGoods('Refrigerator', 1, 2, 50000, 90000, null, null, null, null);
+
+SELECT *
+FROM getGoods('Refrigerator', 1, 2, 50000, 90000, 1, 'productItemPrice', 100, 100, true);

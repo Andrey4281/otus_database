@@ -365,3 +365,6 @@ ALTER TABLE otus.warehouse ADD FOREIGN KEY ("supplier_fk") REFERENCES otus."supp
 
 CREATE UNIQUE INDEX "warehouse_contact_data_warehouse_fk_idx" ON otus."warehouse_contact_data" ("warehouse_fk");
 
+CREATE INDEX "customer_contact_data_customer_fk_idx" ON otus."customer_contact_data" ("customer_fk");
+
+
