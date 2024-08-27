@@ -1,0 +1,5 @@
+1) Добавление товара в корзину:
+rpush customer:1 "{\"product_item_id\": 1, \"delivery_kind_id\": 1, \"supplier_pick_up_point_id\": 1, \"amount\": 2.0, \"total_cost\": 1000.000, \"delivery_date\": \"2024-08-27\"}"
+rpush customer:1 "{\"product_item_id\": 3, \"delivery_kind_id\": 2, \"supplier_pick_up_point_id\": 1, \"amount\": 5.0, \"total_cost\": 5000.000, \"delivery_date\": \"2024-08-29\"}"
+2) Извлечение товаров из корзины:
+lpop customer:1
