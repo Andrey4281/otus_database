@@ -367,4 +367,5 @@ CREATE UNIQUE INDEX "warehouse_contact_data_warehouse_fk_idx" ON otus."warehouse
 
 CREATE INDEX "customer_contact_data_customer_fk_idx" ON otus."customer_contact_data" ("customer_fk");
 
+CREATE INDEX product_product_search_gin ON otus.product USING gin(product_search);
 
