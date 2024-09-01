@@ -157,3 +157,67 @@ FROM getGoods('Refrigerator', 1, 2, 50000, 90000, null, null, null, null);
 
 SELECT *
 FROM getGoods('Refrigerator', 1, 2, 50000, 90000, 1, 'productItemPrice', 100, 100, true);
+
+
+CREATE OR REPLACE FUNCTION saveOrder(customerId bigint, order_items json)
+    RETURNS void
+AS
+$$
+DECLARE
+    json_array_length int;
+product_item_id_val bigint;
+delivery_kind_id_val int;
+supplier_pick_up_point_id_val int;
+amount_val numeric(10, 2);
+total_cost_val numeric(19, 4);
+delivery_date_val date;
+order_id_val bigint;
+v_rec record;
+counter int;
+min_order_item_date date;
+BEGIN
+SELECT json_array_length(order_items) INTO json_array_length;
+RAISE NOTICE 'array length: %', json_array_length;
+FOR counter IN 0..json_array_length - 1 LOOP
+        FOR v_rec IN (SELECT * FROM json_each_text(json_array_element(order_items, counter))
+                      WHERE key = 'delivery_date') LOOP
+            IF (min_order_item_date IS NULL) THEN
+                min_order_item_date := to_date(v_rec.value, 'YYYY-MM-DD');
+ELSEIF (min_order_item_date > to_date(v_rec.value, 'YYYY-MM-DD')) THEN
+                min_order_item_date := to_date(v_rec.value, 'YYYY-MM-DD');
+END IF;
+END LOOP;
+END LOOP;
+RAISE NOTICE 'Min date: %', min_order_item_date;
+INSERT INTO otus."order"(customer_id, delivary_date) VALUES (customerId, min_order_item_date) RETURNING id INTO order_id_val;
+RAISE NOTICE 'OrderId: %', order_id_val;
+FOR counter IN 0..json_array_length - 1 LOOP
+            FOR v_rec IN (SELECT * FROM json_each_text(json_array_element(order_items, counter))) LOOP
+                CASE
+                    WHEN v_rec.key = 'product_item_id' THEN
+                    product_item_id_val := v_rec.value;
+WHEN v_rec.key = 'delivery_kind_id' THEN
+                    delivery_kind_id_val := v_rec.value;
+WHEN v_rec.key = 'supplier_pick_up_point_id' THEN
+                    supplier_pick_up_point_id_val := v_rec.value;
+WHEN v_rec.key = 'amount' THEN
+                    amount_val := v_rec.value;
+WHEN v_rec.key = 'total_cost' THEN
+                    total_cost_val := v_rec.value;
+WHEN v_rec.key = 'delivery_date' THEN
+                    delivery_date_val := to_date(v_rec.value, 'YYYY-MM-DD');
+END CASE;
+END LOOP;
+INSERT INTO otus.order_item(order_id, product_item_id, delivery_kind_id, supplier_pick_up_point_id, amount, total_cost, delivery_date, status)
+VALUES (order_id_val, product_item_id_val, delivery_kind_id_val, supplier_pick_up_point_id_val, amount_val, total_cost_val, delivery_date_val, 'NEW');
+END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT saveOrder(1, '[{"product_item_id": 1, "delivery_kind_id": 1, "supplier_pick_up_point_id": 1, "amount": 2.0, "total_cost": 1000.000, "delivery_date": "2024-08-27"},
+  {"product_item_id": 3, "delivery_kind_id": 2, "supplier_pick_up_point_id": 1, "amount": 5.0, "total_cost": 5000.000, "delivery_date": "2024-08-29"}]');
+
+SELECT * FROM otus."order" o
+                  INNER JOIN otus.order_item oi on o.id = oi.order_id
+WHERE o.id = 1123241 AND o.delivary_date BETWEEN '2024-08-01' AND '2024-08-31'
+  AND oi.delivery_date BETWEEN '2024-08-01' AND '2024-08-31' AND customer_id = 1;
